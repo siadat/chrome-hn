@@ -1,0 +1,7 @@
+.hnOmniNoMatch {
+  display:none;
+}
+
+.hnOmniMatch {
+  border-left:10px solid #ff6600;
+}
