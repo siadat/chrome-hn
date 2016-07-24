@@ -1,6 +1,6 @@
 # HN commands
 
-Use Chrome omnibox to run `grep`, `user` and `depth` commands on HN comments.
+Use Chrome omnibox to run **grep**, **limit**, **depth**, and **user** commands on HN comments.
 It is pretty fast.
 
 ## Usage
@@ -16,6 +16,10 @@ Type these in the Chrome omnibox (addressbar):
     hn focus
 
 ## Example
+
+Display only 1 reply of each comment
+
+    hn limit 1
 
 Display root comments only
 
@@ -39,9 +43,12 @@ Reset filters
 
 ## Similar tools
 
-Use [this console script](https://news.ycombinator.com/item?id=10313519) instead, if you don't have Chrome.
+Use [this console script](https://news.ycombinator.com/item?id=10313519) for filtering comments, if you don't have Chrome.
 
-If you like this extension, you might also like [chrome-ff](https://github.com/siadat/chrome-ff) and [chrome-godoc](https://github.com/siadat/chrome-godoc).
+If you like this extension, you might also like these omnibox extensions for Chrome:
+
+* **[chrome-ff](https://github.com/siadat/chrome-ff)**: Fuzzy finder for tabs and windows
+* **[chrome-godoc](https://github.com/siadat/chrome-godoc)**: Go docs finder for packages, func, and types
 
 ## Contributing
 
