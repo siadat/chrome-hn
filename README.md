@@ -10,6 +10,7 @@ Type these in the Chrome omnibox (addressbar):
     hn grep [-v] [REGEX]
     hn user [-v] [USERNAME]
     hn depth [NUMBER]
+    hn limit [NUMBER]
     hn reset
     hn open
     hn focus

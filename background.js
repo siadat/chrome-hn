@@ -3,6 +3,7 @@ const commands = [
   {name: 'user',  options: '[-v] [USERNAME]', description: 'Display comments by <url>USERNAME</url>. Invert with <url>-v</url>.'},
   {name: 'depth', options: '[NUMBER]',        description: 'Display comments with depth <url>NUMBER</url>.'},
   {name: 'reset', options: '',                description: 'Reset all filters and display everything.'},
+  {name: 'limit', options: '[NUMBER]',        description: 'Show only the first <url>NUMBER</url> comments for each comment.'},
   {name: 'open',  options: '',                description: '[Experimental] Open HN home page in a new tab.'},
   {name: 'focus', options: '',                description: '[Experimental] Put each sentence in its own line.'},
 ];
@@ -46,18 +47,61 @@ function cmdFocus() {
 
   document.querySelectorAll('.comtr').forEach(function(comtr) {
     comtr.querySelectorAll('.comment').forEach(function(comment) {
-      setTimeout(function() {
-        replaceNodeRecursive(comment, regex, replace);
-      }, 0);
+      setTimeout(() => replaceNodeRecursive(comment, regex, replace), 0);
     });
+  });
+}
+
+function cmdLimit(queries) {
+  let minDepth = 1;
+  let limit = parseInt(queries[0]) || 0;
+
+  if(limit === 0) {
+    document.querySelectorAll('.comtr.hnOmniNoMatch').forEach(comtr => comtr.classList.remove('hnOmniNoMatch'));
+    return;
+  }
+
+  let counter = [0];
+  let lastDepth = 0;
+  const leftIndent = 40;
+  document.querySelectorAll('.comtr').forEach(function(comtr) {
+    let depth = parseInt(comtr.querySelector('.ind img').getAttribute('width'))/leftIndent;
+
+    if(depth > lastDepth) {
+      counter.push(0);
+    } else if(depth < lastDepth) {
+      for(let i = depth ; i < lastDepth ; i++) {
+        counter.pop();
+      }
+    }
+
+    counter[counter.length-1]++;
+
+    console.log(depth, counter);
+
+    deepestParent = counter[counter.length-1];
+
+    for(let i = counter.length-1 ; i >= 1 ; i--) {
+      if(counter[i] > deepestParent) {
+        deepestParent = counter[i];
+      }
+    }
+
+    if(deepestParent > limit && counter.length > minDepth) {
+      setTimeout(() => comtr.classList.add('hnOmniNoMatch'), 0);
+    } else {
+      setTimeout(() => comtr.classList.remove('hnOmniNoMatch'), 0);
+    }
+
+    lastDepth = depth;
   });
 }
 
 function cmdDepth(queries) {
   let depth = parseInt(queries[0]) || 0;
-  const leftIndent = 40;
 
   let selectors = [];
+  const leftIndent = 40;
   for(let i = 0 ; i < depth ; i++) {
     selectors.push(`.ind img[width="${i * leftIndent}"]`);
   }
@@ -186,6 +230,7 @@ chrome.omnibox.onInputEntered.addListener(
           (${unFocus.toString()})();
           (${cmdGrep.toString()})([], {});
           (${cmdDepth.toString()})([], {});
+          (${cmdLimit.toString()})([], {});
         `;
         break;
       case 'user':
@@ -196,6 +241,9 @@ chrome.omnibox.onInputEntered.addListener(
         break;
       case 'depth':
         code = `(${cmdDepth.toString()})(${JSON.stringify(words)})`;
+        break;
+      case 'limit':
+        code = `(${cmdLimit.toString()})(${JSON.stringify(words)})`;
         break;
       case 'open':
         chrome.tabs.create({url: "https://news.ycombinator.com"});
