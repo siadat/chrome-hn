@@ -1,7 +1,8 @@
 # HN commands
 
 Use Chrome omnibox to run **grep**, **limit**, **depth**, and **user** commands on HN comments.
-It is pretty fast.
+
+![Screenshot](https://github.com/siadat/chrome-hn/raw/screenshots/chrome-hn-screenshot.png)
 
 ## Usage
 

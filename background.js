@@ -127,7 +127,6 @@ function cmdGrep(queries, options) {
   }
 
   let isShowAll = (queries.length === 0);
-
   let regexes = queries.map(q => new RegExp(`(${q})`, 'ig'));
 
 	let hashCode = function(str) {
